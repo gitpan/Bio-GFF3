@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::LowLevel::VERSION = '0.1';
+  $Bio::GFF3::LowLevel::VERSION = '0.2';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 
@@ -43,7 +43,7 @@ sub gff3_parse_feature {
 
   my @f = split /\t/, $line;
   for( 0..8 ) {
-      if( $f[$_] eq '.' ) {
+      if( defined $f[$_] && $f[$_] eq '.' ) {
           $f[$_] = undef;
       }
   }
@@ -174,7 +174,7 @@ parses it and returns a hashref of its information, of the form:
     {
         seq_id => 'chr02',
         source => 'AUGUSTUS',
-        type   => 'transcript'
+        type   => 'transcript',
         start  => '23486',
         end    => '48209',
         score  => '0.02',

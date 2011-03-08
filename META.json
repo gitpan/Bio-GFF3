@@ -22,8 +22,10 @@
       "runtime" : {
          "requires" : {
             "Exporter" : 0,
+            "File::Copy" : 0,
             "File::ReadBackwards" : 0,
             "File::Temp" : 0,
+            "Getopt::Std" : 0,
             "Pod::Usage" : 0,
             "Scalar::Util" : 0,
             "URI::Escape" : 0
@@ -50,7 +52,7 @@
          "web" : "http://github.com/rbuels/bio-gff3"
       }
    },
-   "version" : "0.1",
+   "version" : "0.2",
    "x_Dist_Zilla" : {
       "plugins" : [
          {

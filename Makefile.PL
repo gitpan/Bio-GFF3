@@ -27,13 +27,15 @@ my %WriteMakefileArgs = (
   'NAME' => 'Bio::GFF3',
   'PREREQ_PM' => {
     'Exporter' => '0',
+    'File::Copy' => '0',
     'File::ReadBackwards' => '0',
     'File::Temp' => '0',
+    'Getopt::Std' => '0',
     'Pod::Usage' => '0',
     'Scalar::Util' => '0',
     'URI::Escape' => '0'
   },
-  'VERSION' => '0.1',
+  'VERSION' => '0.2',
   'test' => {
     'TESTS' => 't/*.t t/transforms/*.t'
   }
