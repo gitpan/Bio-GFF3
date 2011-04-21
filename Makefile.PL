@@ -12,8 +12,8 @@ my %WriteMakefileArgs = (
   'ABSTRACT' => 'fast, low-level GFF3 manipulation',
   'AUTHOR' => 'Robert Buels <rmb32@cornell.edu>',
   'BUILD_REQUIRES' => {
-    'File::Slurp' => '0',
     'IO::Scalar' => '0',
+    'IO::String' => '0',
     'Test::More' => '0'
   },
   'CONFIGURE_REQUIRES' => {
@@ -21,11 +21,13 @@ my %WriteMakefileArgs = (
   },
   'DISTNAME' => 'Bio-GFF3',
   'EXE_FILES' => [
-    'bin/gff3_insert_sync_directives'
+    'bin/gff3_insert_sync_directives',
+    'bin/gff3_from_fasta'
   ],
   'LICENSE' => 'perl',
   'NAME' => 'Bio::GFF3',
   'PREREQ_PM' => {
+    'Carp' => '0',
     'Exporter' => '0',
     'File::Copy' => '0',
     'File::ReadBackwards' => '0',
@@ -35,7 +37,7 @@ my %WriteMakefileArgs = (
     'Scalar::Util' => '0',
     'URI::Escape' => '0'
   },
-  'VERSION' => '0.2',
+  'VERSION' => '0.3',
   'test' => {
     'TESTS' => 't/*.t t/transforms/*.t'
   }

@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::LowLevel::VERSION = '0.2';
+  $Bio::GFF3::LowLevel::VERSION = '0.3';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 
@@ -227,8 +227,8 @@ encoding those attributes.
 
 For convenience, single-valued attributes can have simple scalars as
 values in the passed hashref.  For example, if a feature has only one
-C<ID> attribute (as it should), you can pass C<{ ID =&gt; 'foo' }>
-instead of C<{ ID =&gt; ['foo'] }}>.
+C<ID> attribute (as it should), you can pass C<{ ID =E<gt> 'foo' }>
+instead of C<{ ID =E<gt> ['foo'] }}>.
 
 =head2 gff3_escape( $string )
 

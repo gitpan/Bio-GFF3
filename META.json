@@ -21,6 +21,7 @@
       },
       "runtime" : {
          "requires" : {
+            "Carp" : 0,
             "Exporter" : 0,
             "File::Copy" : 0,
             "File::ReadBackwards" : 0,
@@ -33,8 +34,8 @@
       },
       "test" : {
          "requires" : {
-            "File::Slurp" : 0,
             "IO::Scalar" : 0,
+            "IO::String" : 0,
             "Test::More" : 0
          }
       }
@@ -52,7 +53,7 @@
          "web" : "http://github.com/rbuels/bio-gff3"
       }
    },
-   "version" : "0.2",
+   "version" : "0.3",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -144,11 +145,6 @@
             "class" : "Dist::Zilla::Plugin::PodSyntaxTests",
             "name" : "@Filter/PodSyntaxTests",
             "version" : "4.200003"
-         },
-         {
-            "class" : "Dist::Zilla::Plugin::NoTabsTests",
-            "name" : "@Filter/NoTabsTests",
-            "version" : "0.01"
          },
          {
             "class" : "Dist::Zilla::Plugin::PodCoverageTests",

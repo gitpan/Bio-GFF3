@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::Transform::SyncDirectives::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::Transform::SyncDirectives::VERSION = '0.2';
+  $Bio::GFF3::Transform::SyncDirectives::VERSION = '0.3';
 }
 # ABSTRACT: insert sync (###) directives into an existing GFF3 file.
 
@@ -30,7 +30,7 @@ sub gff3_add_sync_directives {
         while ( my $line = $fh->readline ) {
             $tempfile->print( $line ) unless $line =~ /^###\s*$/;
             unless( $line =~ /^#/ ) {
-                if ( my ( $attr ) = $line =~ / \t ([^\t]+) $/x ) {
+                if ( my ( $attr ) = $line =~ / \t ([^\t]+) \s* $/x ) {
                     $attr = Bio::GFF3::LowLevel::gff3_parse_attributes( $attr );
                     if ( $attr->{Parent} ) {
                         for ( @{$attr->{Parent}} ) {
