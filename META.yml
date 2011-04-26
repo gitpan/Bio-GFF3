@@ -29,7 +29,7 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=Bio-GFF3
   homepage: http://search.cpan.org/dist/Bio-GFF3
   repository: http://github.com/solgenomics/bio-gff3
-version: 0.3
+version: 0.4
 x_Dist_Zilla:
   plugins:
     -
