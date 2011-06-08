@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::Transform::SyncDirectives::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::Transform::SyncDirectives::VERSION = '0.4';
+  $Bio::GFF3::Transform::SyncDirectives::VERSION = '0.5';
 }
 # ABSTRACT: insert sync (###) directives into an existing GFF3 file.
 
@@ -53,7 +53,7 @@ sub gff3_add_sync_directives {
     # print up to and not including the first sync mark (to get rid of the
     # unnecessary first one
     while ( my $line = $temp_backwards->readline ) {
-        last if $line =~ /^###$/;
+        last if $line =~ /^###\s*$/;
         print $out_fh $line;
     }
     while ( my $line = $temp_backwards->readline ) {

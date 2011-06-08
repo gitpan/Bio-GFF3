@@ -9,7 +9,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.31
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200003, CPAN::Meta::Converter version 2.110390'
+generated_by: 'Dist::Zilla version 4.200003, CPAN::Meta::Converter version 2.110930'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -29,7 +29,7 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=Bio-GFF3
   homepage: http://search.cpan.org/dist/Bio-GFF3
   repository: http://github.com/solgenomics/bio-gff3
-version: 0.4
+version: 0.5
 x_Dist_Zilla:
   plugins:
     -
