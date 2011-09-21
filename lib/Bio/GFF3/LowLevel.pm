@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::LowLevel::VERSION = '0.5';
+  $Bio::GFF3::LowLevel::VERSION = '0.6';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 
@@ -108,7 +108,11 @@ sub gff3_format_attributes {
       my $key = $_;
       my $val = $attr->{$key};
       $val = [ $val ] unless ref $val;
-      "$key=".join( ',', map gff3_escape($_), @$val );
+      if( @$val ) {
+          "$key=".join( ',', map gff3_escape($_), @$val );
+      } else {
+          ()
+      }
     } sort keys %$attr
  );
 

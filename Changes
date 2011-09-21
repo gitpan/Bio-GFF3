@@ -1,3 +1,8 @@
+0.6       2011-09-21 15:22:06 America/Los_Angeles
+
+ * when formatting GFF3 attributes, don't print attributes with no
+   value
+
 0.5       2011-06-08 13:04:39 America/Los_Angeles
 
  * tweak syncdirectives transform to hopefully work on win32

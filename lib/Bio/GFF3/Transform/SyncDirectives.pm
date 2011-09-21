@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::Transform::SyncDirectives::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::Transform::SyncDirectives::VERSION = '0.5';
+  $Bio::GFF3::Transform::SyncDirectives::VERSION = '0.6';
 }
 # ABSTRACT: insert sync (###) directives into an existing GFF3 file.
 
