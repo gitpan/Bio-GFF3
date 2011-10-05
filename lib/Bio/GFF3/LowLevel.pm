@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::LowLevel::VERSION = '0.6';
+  $Bio::GFF3::LowLevel::VERSION = '0.7';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 
@@ -98,6 +98,23 @@ sub gff3_format_feature {
 }
 
 
+my %force_attr_first = (
+    ID     => 1,
+    Name   => 2,
+    Alias  => 3,
+    Parent => 4,
+);
+sub _cmp_attr_names {
+    no warnings 'uninitialized';
+    my ( $fa, $fb ) = @force_attr_first{ $a, $b };
+    return $fa <=> $fb if $fa && $fb;
+
+    return -1 if  $fa && !$fb;
+    return  1 if !$fa &&  $fb;
+
+    return $a cmp $b;
+}
+
 sub gff3_format_attributes {
   my ( $attr ) = @_;
 
@@ -113,7 +130,9 @@ sub gff3_format_attributes {
       } else {
           ()
       }
-    } sort keys %$attr
+    }
+    sort _cmp_attr_names
+    keys %$attr
  );
 
   return length $astring ? $astring : '.';
