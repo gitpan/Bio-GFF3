@@ -41,7 +41,7 @@ my %WriteMakefileArgs = (
     'Scalar::Util' => '0',
     'URI::Escape' => '0'
   },
-  'VERSION' => '0.8',
+  'VERSION' => '0.9',
   'test' => {
     'TESTS' => 't/*.t t/transforms/*.t'
   }

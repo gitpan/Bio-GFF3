@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::LowLevel::VERSION = '0.8';
+  $Bio::GFF3::LowLevel::VERSION = '0.9';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 
@@ -265,7 +265,16 @@ values are always arrayrefs, even if they have only one value.
 
 Parse a GFF3 directive/metadata line.  Returns a hashref as:
 
+  {  directive => 'directive-name',
+     value     => 'the contents of the directive'
+  }
+
 Or nothing if the line could not be parsed as a GFF3 directive.
+
+In addition, C<sequence-region> and C<genome-build> directives are
+parsed further.  C<sequence-region> hashrefs have additional
+C<seq_id>, C<start>, and C<end> keys, and C<genome-build> hashrefs
+have additional C<source> and C<buildname> keys
 
 =head2 gff3_format_feature( \%fields )
 

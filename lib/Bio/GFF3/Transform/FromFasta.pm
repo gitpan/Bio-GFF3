@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::Transform::FromFasta::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::Transform::FromFasta::VERSION = '0.8';
+  $Bio::GFF3::Transform::FromFasta::VERSION = '0.9';
 }
 # ABSTRACT: make gff3 for the sequences in a fasta file
 
