@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::LowLevel::VERSION = '0.7';
+  $Bio::GFF3::LowLevel::VERSION = '0.8';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 
@@ -18,6 +18,7 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(
   gff3_parse_feature
   gff3_parse_attributes
+  gff3_parse_directive
   gff3_format_feature
   gff3_format_attributes
   gff3_escape
@@ -39,7 +40,7 @@ my @gff3_field_names = qw(
 
 sub gff3_parse_feature {
   my ( $line ) = @_;
-  chomp $line;
+  $line =~ s/\s*$//;
 
   my @f = split /\t/, $line;
   for( 0..8 ) {
@@ -59,13 +60,12 @@ sub gff3_parse_feature {
 }
 
 
-
 sub gff3_parse_attributes {
     my ( $attr_string ) = @_;
 
     return {} if !defined $attr_string || $attr_string eq '.';
 
-    chomp $attr_string;
+    $attr_string =~ s/\s*$//;
 
     my %attrs;
     for my $a ( split /;/, $attr_string ) {
@@ -76,6 +76,34 @@ sub gff3_parse_attributes {
     }
 
     return \%attrs;
+}
+
+
+sub gff3_parse_directive {
+    my ( $line ) = @_;
+
+
+    my ( $name, $contents ) = $line =~ /^ \s* \#\# \s* (\S+) \s* (.*) $/x
+        or return;
+
+    my $parsed = { directive => $name };
+    if( length $contents ) {
+        $contents =~ s/\s+$//;
+        $parsed->{value} = $contents;
+    }
+
+    # do a little additional parsing for sequence-region and genome-build directives
+    if( $name eq 'sequence-region' ) {
+        my ( $seqid, $start, $end ) = split /\s+/, $contents, 3;
+        s/\D//g for $start, $end;
+        @{$parsed}{qw( seq_id start end )} = ( $seqid, $start, $end );
+    }
+    elsif( $name eq 'genome-build' ) {
+        my ( $source, $buildname ) = split /\s+/, $contents, 2;
+        @{$parsed}{qw(source buildname)} = ( $source, $buildname );
+    }
+
+    return $parsed;
 }
 
 
@@ -124,9 +152,10 @@ sub gff3_format_attributes {
     map {
       my $key = $_;
       my $val = $attr->{$key};
-      $val = [ $val ] unless ref $val;
-      if( @$val ) {
-          "$key=".join( ',', map gff3_escape($_), @$val );
+      no warnings 'uninitialized';
+      $val = join( ',', map gff3_escape($_), ref $val eq 'ARRAY' ? @$val : $val );
+      if( length $val ) {
+          "$key=$val"
       } else {
           ()
       }
@@ -232,6 +261,12 @@ Always returns a hashref.  If the passed attribute string is
 undefined, or ".", the hashref returned will be empty.  Attribute
 values are always arrayrefs, even if they have only one value.
 
+=head2 gff3_parse_directive( $line )
+
+Parse a GFF3 directive/metadata line.  Returns a hashref as:
+
+Or nothing if the line could not be parsed as a GFF3 directive.
+
 =head2 gff3_format_feature( \%fields )
 
 Given a hashref of feature information in the same format returned by
@@ -268,7 +303,7 @@ Robert Buels <rmb32@cornell.edu>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Robert Buels.
+This software is copyright (c) 2012 by Robert Buels.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

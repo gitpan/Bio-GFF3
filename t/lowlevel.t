@@ -6,6 +6,7 @@ use Test::More;
 use Bio::GFF3::LowLevel qw(
     gff3_parse_feature
     gff3_parse_attributes
+    gff3_parse_directive
     gff3_format_feature
     gff3_format_attributes
     gff3_escape
@@ -51,6 +52,20 @@ is( gff3_format_attributes( {}    ), '.', 'format empty attributes' );
 is( gff3_format_attributes( { zee => 'zoz' } ), 'zee=zoz', 'format malformed attributes' );
 is( gff3_format_attributes( { Alias => [], ID => ['Jim'] } ), 'ID=Jim', 'skip empty attributes' );
 is( gff3_format_attributes( { Alias => [], ID => ['Jim'], Alias => ['Bob'], fogbat => ['noggin'], '01base' => ['free'], } ), 'ID=Jim;Alias=Bob;01base=free;fogbat=noggin', 'ID is forced to be first-printed attr' );
+is( gff3_format_attributes( { ID => 'Bob', zee => undef } ), 'ID=Bob', 'also skip undef attributes 1' );
+is( gff3_format_attributes( { ID => 'Bob', zee => [ undef ] } ), 'ID=Bob', 'also skip undef attributes 2' );
+
+
+is_deeply(
+    gff3_parse_directive(" ## sequence-region contig12321_2.3  23,232  24,435,432"),
+    { directive => 'sequence-region',
+      seq_id => 'contig12321_2.3',
+      start => 23_232,
+      end   => 24_435_432,
+      value => 'contig12321_2.3  23,232  24,435,432',
+    },
+    'gff3_parse_directive seems to work',
+);
 
 done_testing;
 

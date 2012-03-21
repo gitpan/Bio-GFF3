@@ -12,6 +12,7 @@ my %WriteMakefileArgs = (
   'ABSTRACT' => 'fast, low-level GFF3 manipulation',
   'AUTHOR' => 'Robert Buels <rmb32@cornell.edu>',
   'BUILD_REQUIRES' => {
+    'File::Spec::Functions' => '0',
     'IO::Scalar' => '0',
     'IO::String' => '0',
     'Test::More' => '0'
@@ -33,11 +34,14 @@ my %WriteMakefileArgs = (
     'File::ReadBackwards' => '0',
     'File::Temp' => '0',
     'Getopt::Std' => '0',
+    'IO::Handle' => '0',
+    'IO::Pipe' => '0',
+    'POSIX' => '0',
     'Pod::Usage' => '0',
     'Scalar::Util' => '0',
     'URI::Escape' => '0'
   },
-  'VERSION' => '0.7',
+  'VERSION' => '0.8',
   'test' => {
     'TESTS' => 't/*.t t/transforms/*.t'
   }

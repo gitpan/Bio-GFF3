@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::Transform::SyncDirectives::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::Transform::SyncDirectives::VERSION = '0.7';
+  $Bio::GFF3::Transform::SyncDirectives::VERSION = '0.8';
 }
 # ABSTRACT: insert sync (###) directives into an existing GFF3 file.
 
@@ -97,7 +97,7 @@ Robert Buels <rmb32@cornell.edu>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Robert Buels.
+This software is copyright (c) 2012 by Robert Buels.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -3,13 +3,14 @@ abstract: 'fast, low-level GFF3 manipulation'
 author:
   - 'Robert Buels <rmb32@cornell.edu>'
 build_requires:
+  File::Spec::Functions: 0
   IO::Scalar: 0
   IO::String: 0
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.31
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200003, CPAN::Meta::Converter version 2.110930'
+generated_by: 'Dist::Zilla version 4.200003, CPAN::Meta::Converter version 2.112150'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -22,6 +23,9 @@ requires:
   File::ReadBackwards: 0
   File::Temp: 0
   Getopt::Std: 0
+  IO::Handle: 0
+  IO::Pipe: 0
+  POSIX: 0
   Pod::Usage: 0
   Scalar::Util: 0
   URI::Escape: 0
@@ -29,7 +33,7 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=Bio-GFF3
   homepage: http://search.cpan.org/dist/Bio-GFF3
   repository: http://github.com/solgenomics/bio-gff3
-version: 0.7
+version: 0.8
 x_Dist_Zilla:
   plugins:
     -
