@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::LowLevel::VERSION = '0.9';
+  $Bio::GFF3::LowLevel::VERSION = '1.0';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 
@@ -40,18 +40,17 @@ my @gff3_field_names = qw(
 
 sub gff3_parse_feature {
   my ( $line ) = @_;
-  $line =~ s/\s*$//;
 
   my @f = split /\t/, $line;
-  for( 0..8 ) {
-      if( defined $f[$_] && $f[$_] eq '.' ) {
-          $f[$_] = undef;
+  for( @f ) {
+      if( $_ eq '.' ) {
+          $_ = undef;
       }
   }
-  # don't unescape the attr column, that is parsed separately
-  for( 0..7 ) {
-      $f[$_] = gff3_unescape( $f[$_] );
-  }
+  # unescape only the ref and source columns
+  # (inline loop for performance)
+  $f[0] =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
+  $f[1] =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
 
   $f[8] = gff3_parse_attributes( $f[8] );
   my %parsed;
@@ -65,14 +64,15 @@ sub gff3_parse_attributes {
 
     return {} if !defined $attr_string || $attr_string eq '.';
 
-    $attr_string =~ s/\s*$//;
+    chomp $attr_string;
+    $attr_string =~ s/\r$//;
 
     my %attrs;
     for my $a ( split /;/, $attr_string ) {
         next unless $a;
         my ( $name, $values ) = split /=/, $a, 2;
         next unless defined $values;
-        push @{$attrs{$name}}, map gff3_unescape($_), split /,/, $values;
+        push @{$attrs{$name}}, map { s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg; $_ } split /,/, $values;
     }
 
     return \%attrs;
@@ -82,13 +82,12 @@ sub gff3_parse_attributes {
 sub gff3_parse_directive {
     my ( $line ) = @_;
 
-
     my ( $name, $contents ) = $line =~ /^ \s* \#\# \s* (\S+) \s* (.*) $/x
         or return;
 
     my $parsed = { directive => $name };
     if( length $contents ) {
-        $contents =~ s/\s+$//;
+        $contents =~ s/\r?\n$//;
         $parsed->{value} = $contents;
     }
 
@@ -173,9 +172,7 @@ sub gff3_escape {
 }
 
 
-sub gff3_unescape {
-    URI::Escape::uri_unescape( $_[0] )
-}
+*gff3_unescape = \&URI::Escape::uri_unescape;
 
 
 __END__

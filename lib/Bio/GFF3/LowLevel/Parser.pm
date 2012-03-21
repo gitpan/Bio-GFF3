@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::Parser::AUTHORITY = 'cpan:RBUELS';
 }
 BEGIN {
-  $Bio::GFF3::LowLevel::Parser::VERSION = '0.9';
+  $Bio::GFF3::LowLevel::Parser::VERSION = '1.0';
 }
 # ABSTRACT: a fast, low-level gff3 parser
 
@@ -66,7 +66,6 @@ sub _buffer_items {
             my $f = Bio::GFF3::LowLevel::gff3_parse_feature( $line );
             $f->{child_features} = [];
             $self->_buffer_feature( $f );
-            return if @$item_buffer; #< return if we were able to buffer the feature for returning
         }
         # directive or comment
         elsif( my ( $hashsigns, $contents ) = $line =~ /^ \s* (\#+) (.*) /x ) {
@@ -87,7 +86,6 @@ sub _buffer_items {
                 $contents =~ s/\s*$//;
                 push @$item_buffer, { comment => $contents };
             }
-            return;
         }
         elsif( $line =~ /^ \s* $/x ) {
             # blank line, do nothing
@@ -103,6 +101,10 @@ sub _buffer_items {
             chomp $line;
             croak "$self->{filethings}[0]:$.: parse error.  Cannot parse '$line'.";
         }
+
+        # return now if we were able to find some things to put in the
+        # output buffer
+        return if @$item_buffer
     }
 
     # if we are out of lines, buffer all under-construction features
@@ -124,15 +126,22 @@ sub _buffer_all_under_construction_features {
 ## get the next line from our file(s), returning nothing if we are out
 ## of lines and files
 sub _next_line {
-    my ( $self ) = @_;
-    my $filehandles = $self->{filehandles};
-    while( @$filehandles ) {
-        my $line = $filehandles->[0]->getline;
-        return $line if $line;
-        shift @$filehandles;
-        shift @{$self->{filethings}};
-    }
-    return;
+    no warnings;
+    # fast code path for reading a line from the first filehandle,
+    my $first_fh = $_[0]->{filehandles}[0];
+    return <$first_fh> || do {
+        # slower case where we are at the end, or need to change
+        # filehandles
+        my ( $self ) = @_;
+        my $filehandles = $self->{filehandles};
+        while ( @$filehandles ) {
+            my $line = $filehandles->[0]->getline;
+            return $line if $line;
+            shift @$filehandles;
+            shift @{$self->{filethings}};
+        }
+        return;
+    };
 }
 
 ## do the right thing with a newly-parsed feature line

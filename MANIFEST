@@ -12,7 +12,6 @@ lib/Bio/GFF3/LowLevel.pm
 lib/Bio/GFF3/LowLevel/Parser.pm
 lib/Bio/GFF3/Transform/FromFasta.pm
 lib/Bio/GFF3/Transform/SyncDirectives.pm
-t/data/au9_scaffold.gff3
 t/data/au9_scaffold_subset.gff3
 t/data/directives.gff3
 t/data/gff3_with_syncs.gff3
