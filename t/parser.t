@@ -7,13 +7,25 @@ use File::Spec::Functions 'catfile';
 
 use Bio::GFF3::LowLevel::Parser;
 
-my $p = Bio::GFF3::LowLevel::Parser->new( catfile(qw( t data gff3_with_syncs.gff3 )));
+my $p = Bio::GFF3::LowLevel::Parser->open( catfile(qw( t data gff3_with_syncs.gff3 )));
+
+# {
+#     my $m = $p->_merge_features(
+#                { locations => [1], attributes => { Foo => ['baz'], zaz => ['zoz']} },
+#                { locations => [2], attributes => { Foo => ['bar'], zee => ['ziz']} }
+#             );
+#     is_deeply( $m,
+#                { locations => [1,2], attributes => { Foo => ['baz','bar'], zaz => ['zoz'], zee => ['ziz'}},
+#              ) or diag explain $m;
+# }
 
 my %stuff;
 while( my $i = $p->next_item ) {
-    if( exists $i->{seq_id} ) {
+    if( ref $i eq 'ARRAY' ) {
         push @{$stuff{features}}, $i;
-        is( $i->{type}, 'gene' );
+        for (@$i) {
+            is( $_->{type}, 'gene' );
+        }
     }
     elsif( $i->{directive} ) {
         push @{$stuff{directives}}, $i;
@@ -26,482 +38,13 @@ while( my $i = $p->next_item ) {
     }
 }
 
-my %right_stuff =
-(
-  'directives' => [
-    {
-      'directive' => 'gff-version',
-      'value' => '3'
-    },
-    {
-      'directive' => 'feature-ontology',
-      'value' => 'http://song.cvs.sourceforge.net/*checkout*/song/ontology/sofa.obo?revision=1.93'
-    }
-  ],
-  'features' => [
-    {
-      'attributes' => {
-        'Alias' => [
-          'Solyc00g005000'
-        ],
-        'ID' => [
-          'gene:Solyc00g005000.2'
-        ],
-        'Name' => [
-          'Solyc00g005000.2'
-        ],
-        'from_BOGAS' => [
-          '1'
-        ],
-        'length' => [
-          '1753'
-        ]
-      },
-      'child_features' => [
-        {
-          'attributes' => {
-            'ID' => [
-              'mRNA:Solyc00g005000.2.1'
-            ],
-            'Name' => [
-              'Solyc00g005000.2.1'
-            ],
-            'Parent' => [
-              'gene:Solyc00g005000.2'
-            ],
-            'from_BOGAS' => [
-              '1'
-            ],
-            'length' => [
-              '1753'
-            ],
-            'nb_exon' => [
-              '2'
-            ]
-          },
-          'child_features' => [
-            {
-              'attributes' => {
-                'ID' => [
-                  'exon:Solyc00g005000.2.1.1'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005000.2.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '17275',
-              'phase' => undef,
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '16437',
-              'strand' => '+',
-              'type' => 'exon'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'five_prime_UTR:Solyc00g005000.2.1.0'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005000.2.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '16479',
-              'phase' => undef,
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '16437',
-              'strand' => '+',
-              'type' => 'five_prime_UTR'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'CDS:Solyc00g005000.2.1.1'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005000.2.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '17275',
-              'phase' => '0',
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '16480',
-              'strand' => '+',
-              'type' => 'CDS'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'intron:Solyc00g005000.2.1.1'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005000.2.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '17335',
-              'phase' => undef,
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '17276',
-              'strand' => '+',
-              'type' => 'intron'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'exon:Solyc00g005000.2.1.2'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005000.2.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '18189',
-              'phase' => '0',
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '17336',
-              'strand' => '+',
-              'type' => 'exon'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'CDS:Solyc00g005000.2.1.2'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005000.2.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '17940',
-              'phase' => '2',
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '17336',
-              'strand' => '+',
-              'type' => 'CDS'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'three_prime_UTR:Solyc00g005000.2.1.0'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005000.2.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '18189',
-              'phase' => undef,
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '17941',
-              'strand' => '+',
-              'type' => 'three_prime_UTR'
-            }
-          ],
-          'end' => '18189',
-          'phase' => undef,
-          'score' => undef,
-          'seq_id' => 'SL2.40ch00',
-          'source' => 'ITAG_eugene',
-          'start' => '16437',
-          'strand' => '+',
-          'type' => 'mRNA'
-        }
-      ],
-      'end' => '18189',
-      'phase' => undef,
-      'score' => undef,
-      'seq_id' => 'SL2.40ch00',
-      'source' => 'ITAG_eugene',
-      'start' => '16437',
-      'strand' => '+',
-      'type' => 'gene'
-    },
-    {
-      'attributes' => {
-        'Alias' => [
-          'Solyc00g005020'
-        ],
-        'ID' => [
-          'gene:Solyc00g005020.1'
-        ],
-        'Name' => [
-          'Solyc00g005020.1'
-        ],
-        'from_BOGAS' => [
-          '1'
-        ],
-        'length' => [
-          '703'
-        ]
-      },
-      'child_features' => [
-        {
-          'attributes' => {
-            'ID' => [
-              'mRNA:Solyc00g005020.1.1'
-            ],
-            'Name' => [
-              'Solyc00g005020.1.1'
-            ],
-            'Parent' => [
-              'gene:Solyc00g005020.1'
-            ],
-            'from_BOGAS' => [
-              '1'
-            ],
-            'length' => [
-              '703'
-            ],
-            'nb_exon' => [
-              '3'
-            ]
-          },
-          'child_features' => [
-            {
-              'attributes' => {
-                'ID' => [
-                  'exon:Solyc00g005020.1.1.1'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005020.1.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '68211',
-              'phase' => '0',
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '68062',
-              'strand' => '+',
-              'type' => 'exon'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'CDS:Solyc00g005020.1.1.1'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005020.1.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '68211',
-              'phase' => '0',
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '68062',
-              'strand' => '+',
-              'type' => 'CDS'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'intron:Solyc00g005020.1.1.1'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005020.1.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '68343',
-              'phase' => undef,
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '68212',
-              'strand' => '+',
-              'type' => 'intron'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'exon:Solyc00g005020.1.1.2'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005020.1.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '68568',
-              'phase' => '0',
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '68344',
-              'strand' => '+',
-              'type' => 'exon'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'CDS:Solyc00g005020.1.1.2'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005020.1.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '68568',
-              'phase' => '0',
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '68344',
-              'strand' => '+',
-              'type' => 'CDS'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'intron:Solyc00g005020.1.1.2'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005020.1.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '68653',
-              'phase' => undef,
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '68569',
-              'strand' => '+',
-              'type' => 'intron'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'exon:Solyc00g005020.1.1.3'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005020.1.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '68764',
-              'phase' => '0',
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '68654',
-              'strand' => '+',
-              'type' => 'exon'
-            },
-            {
-              'attributes' => {
-                'ID' => [
-                  'CDS:Solyc00g005020.1.1.3'
-                ],
-                'Parent' => [
-                  'mRNA:Solyc00g005020.1.1'
-                ],
-                'from_BOGAS' => [
-                  '1'
-                ]
-              },
-              'child_features' => [],
-              'end' => '68764',
-              'phase' => '0',
-              'score' => undef,
-              'seq_id' => 'SL2.40ch00',
-              'source' => 'ITAG_eugene',
-              'start' => '68654',
-              'strand' => '+',
-              'type' => 'CDS'
-            }
-          ],
-          'end' => '68764',
-          'phase' => undef,
-          'score' => undef,
-          'seq_id' => 'SL2.40ch00',
-          'source' => 'ITAG_eugene',
-          'start' => '68062',
-          'strand' => '+',
-          'type' => 'mRNA'
-        }
-      ],
-      'end' => '68764',
-      'phase' => undef,
-      'score' => undef,
-      'seq_id' => 'SL2.40ch00',
-      'source' => 'ITAG_eugene',
-      'start' => '68062',
-      'strand' => '+',
-      'type' => 'gene'
-    }
-  ]
-
-
-);
-
+my $right_stuff = do ''.catfile(qw(t data gff3_with_syncs.dumped_result));
 is_deeply( \%stuff,
-           \%right_stuff,
+           $right_stuff,
            'parsed the right stuff' )
     or diag explain \%stuff;
 
-
+# just do some cursory parsing of other files
 for (
       [ 1010, 'messy_protein_domains.gff3'],
       [ 4, 'gff3_with_syncs.gff3' ],
@@ -514,9 +57,11 @@ for (
       [ 6, 'knownGene2.gff3' ],
       [ 11, 'mm9_sample_ensembl.gff3' ],
       [ 16, 'tomato_test.gff3' ],
+      [ 3, 'spec_eden.gff3' ],
+      [ 1, 'spec_match.gff3' ],
     ) {
     my ( $count, $f ) = @$_;
-    my $p = Bio::GFF3::LowLevel::Parser->new( catfile(qw( t data ), $f ));
+    my $p = Bio::GFF3::LowLevel::Parser->open( catfile(qw( t data ), $f ));
     my @things;
     while( my $thing = $p->next_item ) {
         push @things, $thing;
@@ -526,7 +71,7 @@ for (
 
 # check the fasta at the end of the hybrid files
 for my $f ( 'hybrid1.gff3', 'hybrid2.gff3' ) {
-    my $p = Bio::GFF3::LowLevel::Parser->new( catfile(qw( t data ), $f ));
+    my $p = Bio::GFF3::LowLevel::Parser->open( catfile(qw( t data ), $f ));
     my @items;
     while( my $item = $p->next_item ) {
         push @items, $item;
@@ -546,17 +91,54 @@ EOF
     my $gff3 = <<EOG;
 SL2.40ch01	ITAG_eugene	gene	80999140	81004317	.	+	.	Alias=Solyc01g098840;ID=gene:Solyc01g098840.2;Name=Solyc01g098840.2;from_BOGAS=1;length=5178
 EOG
-    my $i = Bio::GFF3::LowLevel::Parser->new( \$gff3 )->next_item;
-    is( $i->{source}, 'ITAG_eugene', 'parsed from a string ref OK' ) or diag explain $i;
+    my $i = Bio::GFF3::LowLevel::Parser->open( \$gff3 )->next_item;
+    is( $i->[0]{source}, 'ITAG_eugene', 'parsed from a string ref OK' ) or diag explain $i;
     my $tempfile = File::Temp->new;
     $tempfile->print( $gff3 );
     $tempfile->close;
     open my $fh, '<', "$tempfile" or die "$! reading $tempfile";
-    $i = Bio::GFF3::LowLevel::Parser->new( $fh  )->next_item;
-    is( $i->{source}, 'ITAG_eugene', 'parsed from a filehandle OK' ) or diag explain $i;
+    $i = Bio::GFF3::LowLevel::Parser->open( $fh  )->next_item;
+    is( $i->[0]{source}, 'ITAG_eugene', 'parsed from a filehandle OK' ) or diag explain $i;
 
 }
 
+# check for support for children before parents, and for Derives_from
+{
+    my $p = Bio::GFF3::LowLevel::Parser->open( catfile(qw( t data knownGene_out_of_order.gff3 )));
+    my @stuff; push @stuff, $_ while $_ = $p->next_item;
+
+    my $right_output = do ''.catfile(qw( t data knownGene_out_of_order.dumped_result ));
+    is( scalar( @stuff ), 6, 'got 6 top-level things' );
+    is_deeply( [@stuff[0..4]], $right_output, 'got the right parse results' ) or diag explain \@stuff;
+    is( $stuff[5]{directive}, 'FASTA', 'and last thing is a FASTA directive' );
+}
+
+
+# try parsing the EDEN gene from the gff3 spec
+{
+    my $p = Bio::GFF3::LowLevel::Parser->open( catfile(qw( t data spec_eden.gff3 )));
+    my @stuff; push @stuff, $_ while $_ = $p->next_item;
+    my $eden = $stuff[2];
+    is( scalar(@$eden), 1 );
+    $eden = $eden->[0];
+    is( scalar(@{ $eden->{child_features} }), 4, 'right number of EDEN child features' );
+
+    is( $eden->{child_features}[0][0]{type}, 'TF_binding_site' );
+
+    # all the rest are mRNAs
+    my @mrnas = @{ $eden->{child_features} }[1..3];
+    is( scalar( grep @$_ == 1, @mrnas ), 3, 'all unique-IDed' );
+    @mrnas = map $_->[0], @mrnas;
+    is( scalar( grep $_->{type} eq 'mRNA', @mrnas ), 3, 'all mRNAs' );
+    # check that all the mRNAs share the last exon
+    my $last_exon = $mrnas[2]{child_features}[3][0];
+    is( $last_exon, $mrnas[0]{child_features}[3][0] );
+    is( $last_exon, $mrnas[1]{child_features}[2][0] );
+    is( scalar(@{ $mrnas[2]{child_features}} ), 6, 'mRNA00003 has 6 children' )
+        or diag explain $mrnas[2]{child_features};
+    is( scalar(@{ $mrnas[1]{child_features}} ), 4, 'mRNA00002 has 4 children' );
+    is( scalar(@{ $mrnas[0]{child_features}} ), 5, 'mRNA00001 has 5 children' );
+}
 
 done_testing;
 

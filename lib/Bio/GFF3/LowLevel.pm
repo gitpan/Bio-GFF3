@@ -2,8 +2,8 @@ package Bio::GFF3::LowLevel;
 BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
-BEGIN {
-  $Bio::GFF3::LowLevel::VERSION = '1.0';
+{
+  $Bio::GFF3::LowLevel::VERSION = '1.1';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 
@@ -40,6 +40,7 @@ my @gff3_field_names = qw(
 
 sub gff3_parse_feature {
   my ( $line ) = @_;
+  no warnings 'uninitialized';
 
   my @f = split /\t/, $line;
   for( @f ) {
@@ -47,8 +48,8 @@ sub gff3_parse_feature {
           $_ = undef;
       }
   }
+
   # unescape only the ref and source columns
-  # (inline loop for performance)
   $f[0] =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
   $f[1] =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
 
@@ -64,15 +65,14 @@ sub gff3_parse_attributes {
 
     return {} if !defined $attr_string || $attr_string eq '.';
 
-    chomp $attr_string;
-    $attr_string =~ s/\r$//;
+    $attr_string =~ s/\r?\n$//;
 
     my %attrs;
-    for my $a ( split /;/, $attr_string ) {
-        next unless $a;
-        my ( $name, $values ) = split /=/, $a, 2;
+    for my $a ( split ';', $attr_string ) {
+        no warnings 'uninitialized';
+        my ( $name, $values ) = split '=', $a, 2;
         next unless defined $values;
-        push @{$attrs{$name}}, map { s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg; $_ } split /,/, $values;
+        push @{$attrs{$name}}, map { s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg; $_ } split ',', $values;
     }
 
     return \%attrs;
