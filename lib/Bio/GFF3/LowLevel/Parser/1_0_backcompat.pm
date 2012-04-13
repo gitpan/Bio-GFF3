@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::Parser::1_0_backcompat::AUTHORITY = 'cpan:RBUELS';
 }
 {
-  $Bio::GFF3::LowLevel::Parser::1_0_backcompat::VERSION = '1.1';
+  $Bio::GFF3::LowLevel::Parser::1_0_backcompat::VERSION = '1.2';
 }
 # ABSTRACT: compatibility layer to support Bio::GFF3::LowLevel::Parser 1.0 API
 

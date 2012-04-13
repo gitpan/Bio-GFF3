@@ -34,4 +34,3 @@ t/release-eol.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/transforms/from_fasta.t
-t/transforms/syncdirectives.t

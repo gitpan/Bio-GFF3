@@ -12,10 +12,8 @@ my %WriteMakefileArgs = (
   "ABSTRACT" => "fast, low-level GFF3 manipulation",
   "AUTHOR" => "Robert Buels <rmb32\@cornell.edu>",
   "BUILD_REQUIRES" => {
-    "Bio::GFF3::Transform::SyncDirectives" => 0,
     "File::Spec::Functions" => 0,
     "File::Temp" => 0,
-    "IO::Scalar" => 0,
     "IO::String" => 0,
     "Test::More" => 0
   },
@@ -44,7 +42,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "1.1",
+  "VERSION" => "1.2",
   "test" => {
     "TESTS" => "t/*.t t/transforms/*.t"
   }
