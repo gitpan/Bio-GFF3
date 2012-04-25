@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::Parser::AUTHORITY = 'cpan:RBUELS';
 }
 {
-  $Bio::GFF3::LowLevel::Parser::VERSION = '1.2';
+  $Bio::GFF3::LowLevel::Parser::VERSION = '1.3';
 }
 # ABSTRACT: a fast, low-level gff3 parser
 
@@ -283,7 +283,7 @@ Bio::GFF3::LowLevel::Parser - a fast, low-level gff3 parser
 
 =head1 SYNOPSIS
 
-  my $p = Bio::GFF3::LowLevel::Parser->new( $file_or_fh );
+  my $p = Bio::GFF3::LowLevel::Parser->open( $file_or_fh );
 
   while( my $i = $p->next_item ) {
 
