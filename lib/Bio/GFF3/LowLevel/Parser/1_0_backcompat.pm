@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::Parser::1_0_backcompat::AUTHORITY = 'cpan:RBUELS';
 }
 {
-  $Bio::GFF3::LowLevel::Parser::1_0_backcompat::VERSION = '1.3';
+  $Bio::GFF3::LowLevel::Parser::1_0_backcompat::VERSION = '1.4';
 }
 # ABSTRACT: compatibility layer to support Bio::GFF3::LowLevel::Parser 1.0 API
 
@@ -50,6 +50,7 @@ sub _buffer_items {
 # take a 2.x feature arrayref, return a list of 1.x-compliant features
 sub _xform_1x {
     my ( $self, $f ) = @_;
+    return $f unless ref $f eq 'ARRAY';
     for my $line (@$f) {
         for my $attr ( 'child_features', 'derived_features' ) {
             $line->{$attr} = [
