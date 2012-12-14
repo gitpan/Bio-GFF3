@@ -15,7 +15,7 @@ my %WriteMakefileArgs = (
     "File::Spec::Functions" => 0,
     "File::Temp" => 0,
     "IO::String" => 0,
-    "Test::More" => 0
+    "Test::More" => "0.88"
   },
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
@@ -42,7 +42,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "1.4",
+  "VERSION" => "1.5",
   "test" => {
     "TESTS" => "t/*.t t/transforms/*.t"
   }

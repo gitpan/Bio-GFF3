@@ -42,7 +42,7 @@
             "File::Spec::Functions" : "0",
             "File::Temp" : "0",
             "IO::String" : "0",
-            "Test::More" : "0"
+            "Test::More" : "0.88"
          }
       }
    },
@@ -59,7 +59,7 @@
          "web" : "http://github.com/rbuels/bio-gff3"
       }
    },
-   "version" : "1.4",
+   "version" : "1.5",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
