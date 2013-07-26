@@ -11,12 +11,7 @@ use ExtUtils::MakeMaker 6.30;
 my %WriteMakefileArgs = (
   "ABSTRACT" => "fast, low-level GFF3 manipulation",
   "AUTHOR" => "Robert Buels <rmb32\@cornell.edu>",
-  "BUILD_REQUIRES" => {
-    "File::Spec::Functions" => 0,
-    "File::Temp" => 0,
-    "IO::String" => 0,
-    "Test::More" => "0.88"
-  },
+  "BUILD_REQUIRES" => {},
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
   },
@@ -28,7 +23,6 @@ my %WriteMakefileArgs = (
   "NAME" => "Bio::GFF3",
   "PREREQ_PM" => {
     "Carp" => 0,
-    "Data::Dumper" => 0,
     "Exporter" => 0,
     "Getopt::Std" => 0,
     "IO::Handle" => 0,
@@ -42,12 +36,31 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "1.5",
+  "TEST_REQUIRES" => {
+    "File::Spec::Functions" => 0,
+    "File::Temp" => 0,
+    "IO::String" => 0,
+    "Test::More" => "0.88"
+  },
+  "VERSION" => "1.6",
   "test" => {
     "TESTS" => "t/*.t t/transforms/*.t"
   }
 );
 
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  my $tr = delete $WriteMakefileArgs{TEST_REQUIRES};
+  my $br = $WriteMakefileArgs{BUILD_REQUIRES};
+  for my $mod ( keys %$tr ) {
+    if ( exists $br->{$mod} ) {
+      $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
+    }
+    else {
+      $br->{$mod} = $tr->{$mod};
+    }
+  }
+}
 
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
   my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};

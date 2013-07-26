@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::Parser::1_0_backcompat::AUTHORITY = 'cpan:RBUELS';
 }
 {
-  $Bio::GFF3::LowLevel::Parser::1_0_backcompat::VERSION = '1.5';
+  $Bio::GFF3::LowLevel::Parser::1_0_backcompat::VERSION = '1.6';
 }
 # ABSTRACT: compatibility layer to support Bio::GFF3::LowLevel::Parser 1.0 API
 
@@ -66,6 +66,7 @@ sub _xform_1x {
 1;
 
 __END__
+
 =pod
 
 =encoding utf-8
@@ -96,4 +97,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

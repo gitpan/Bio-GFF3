@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
 {
-  $Bio::GFF3::LowLevel::VERSION = '1.5';
+  $Bio::GFF3::LowLevel::VERSION = '1.6';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 
@@ -174,8 +174,8 @@ sub gff3_escape {
 
 *gff3_unescape = \&URI::Escape::uri_unescape;
 
-
 __END__
+
 =pod
 
 =encoding utf-8
@@ -315,4 +315,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
