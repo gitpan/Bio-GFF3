@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::Parser::AUTHORITY = 'cpan:RBUELS';
 }
 {
-  $Bio::GFF3::LowLevel::Parser::VERSION = '1.6';
+  $Bio::GFF3::LowLevel::Parser::VERSION = '1.7';
 }
 # ABSTRACT: a fast, low-level gff3 parser
 
@@ -50,6 +50,12 @@ sub _open {
     return $thing if ref $thing eq 'GLOB' || Scalar::Util::blessed( $thing ) && $thing->can('getline');
     CORE::open my $f, '<', $thing or croak "$! opening '$thing' for reading";
     return $f;
+}
+
+
+sub max_lookback {
+    my ( $self, $count ) = @_;
+    $self->{max_lookback} = $count
 }
 
 
@@ -126,6 +132,9 @@ sub _buffer_items {
             croak "$self->{filethings}[0]:$.: parse error.  Cannot parse '$line'.";
         }
 
+        # buffer old features if we are starting to approach our mem limit
+        $self->_ensure_lookback_limit;
+
         # return now if we were able to find some things to put in the
         # output buffer
         return if $self->_buffered_items_count;
@@ -158,6 +167,22 @@ sub _buffer_all_under_construction_features {
 
 GFF3 parse error: some features reference other features that do not exist in the file (or in the same '###' scope).  A list of them:
 EOM
+    }
+}
+
+sub _ensure_lookback_limit {
+    my ( $self ) = @_;
+
+    return unless defined $self->{max_lookback};
+
+    my $toplevel = $self->{under_construction_top_level};
+    my $byid = $self->{under_construction_by_id};
+    my $out_buffer = $self->{item_buffer};
+    no warnings 'uninitialized';
+    while( @$toplevel > $self->{max_lookback} ) {
+        my $f = shift @$toplevel;
+        delete $byid->{$_} for map @{$_->{attributes}{ID}}, @$f;
+        push @$out_buffer, $f;
     }
 }
 
@@ -420,6 +445,13 @@ Comments are parsed into a hashref of the form:
 
 Make a new parser object that will parse the GFF3 from all of the files
 or filehandles that you give it, as if they were all a single stream.
+
+=head2 max_lookback( $features )
+
+Set a maximum number of features the parser will keep buffered in case
+there are features later in the file referring to it.  By default,
+there is no limit, with the parser instead relying on the presense of
+'###' marks in the GFF3 file.
 
 =head2 new
 

@@ -30,6 +30,9 @@
          "requires" : {
             "Carp" : "0",
             "Exporter" : "0",
+            "File::Copy" : "0",
+            "File::ReadBackwards" : "0",
+            "File::Temp" : "0",
             "Getopt::Std" : "0",
             "IO::Handle" : "0",
             "IO::Pipe" : "0",
@@ -46,7 +49,7 @@
       "test" : {
          "requires" : {
             "File::Spec::Functions" : "0",
-            "File::Temp" : "0",
+            "IO::Scalar" : "0",
             "IO::String" : "0",
             "Test::More" : "0.88"
          }
@@ -65,7 +68,7 @@
          "web" : "http://github.com/rbuels/bio-gff3"
       }
    },
-   "version" : "1.6",
+   "version" : "1.7",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.014002"

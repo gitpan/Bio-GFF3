@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::AUTHORITY = 'cpan:RBUELS';
 }
 {
-  $Bio::GFF3::LowLevel::VERSION = '1.6';
+  $Bio::GFF3::LowLevel::VERSION = '1.7';
 }
 # ABSTRACT: fast, low-level functions for parsing and formatting GFF3
 

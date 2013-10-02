@@ -17,6 +17,7 @@ my %WriteMakefileArgs = (
   },
   "DISTNAME" => "Bio-GFF3",
   "EXE_FILES" => [
+    "bin/gff3_insert_sync_directives",
     "bin/gff3_from_fasta"
   ],
   "LICENSE" => "perl",
@@ -24,6 +25,9 @@ my %WriteMakefileArgs = (
   "PREREQ_PM" => {
     "Carp" => 0,
     "Exporter" => 0,
+    "File::Copy" => 0,
+    "File::ReadBackwards" => 0,
+    "File::Temp" => 0,
     "Getopt::Std" => 0,
     "IO::Handle" => 0,
     "IO::Pipe" => 0,
@@ -38,11 +42,11 @@ my %WriteMakefileArgs = (
   },
   "TEST_REQUIRES" => {
     "File::Spec::Functions" => 0,
-    "File::Temp" => 0,
+    "IO::Scalar" => 0,
     "IO::String" => 0,
     "Test::More" => "0.88"
   },
-  "VERSION" => "1.6",
+  "VERSION" => "1.7",
   "test" => {
     "TESTS" => "t/*.t t/transforms/*.t"
   }
