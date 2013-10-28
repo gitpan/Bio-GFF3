@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::Parser::AUTHORITY = 'cpan:RBUELS';
 }
 {
-  $Bio::GFF3::LowLevel::Parser::VERSION = '1.7';
+  $Bio::GFF3::LowLevel::Parser::VERSION = '1.8';
 }
 # ABSTRACT: a fast, low-level gff3 parser
 
@@ -266,7 +266,7 @@ sub _buffer_feature {
     if( !@$ids && !@$parents && !@$derives ) {
         # if it has no IDs and does not refer to anything, we can just
         # output it
-        $self->_buffer_item( $feature_line );
+        $self->_buffer_item( [ $feature_line ] );
         return;
     }
 
@@ -450,7 +450,7 @@ or filehandles that you give it, as if they were all a single stream.
 
 Set a maximum number of features the parser will keep buffered in case
 there are features later in the file referring to it.  By default,
-there is no limit, with the parser instead relying on the presense of
+there is no limit, with the parser instead relying on the presence of
 '###' marks in the GFF3 file.
 
 =head2 new
@@ -460,8 +460,8 @@ Returns a wrapped copy of this parser that returns data that is backward-compati
 =head2 next_item()
 
 Iterate through all of the items (features, directives, and comments)
-in the file(s) given to the parser.  Each item is a returned as a
-hashref.
+in the file(s) given to the parser.  Features are arrayrefs of
+hashrefs, and directives and comments are hashrefs.
 
 =head1 AUTHOR
 

@@ -68,7 +68,7 @@
          "web" : "http://github.com/rbuels/bio-gff3"
       }
    },
-   "version" : "1.7",
+   "version" : "1.8",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.014002"
