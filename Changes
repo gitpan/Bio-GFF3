@@ -1,3 +1,8 @@
+1.9       2014-01-20 13:05:18EST-0500 EST5EDT
+
+ * Added a check in the Parser to make sure that all lines that share
+   a single ID have the same type.
+
 1.8       2013-10-28 10:57:26 EST5EDT
 
  * Fixed a bug in which feature lines with no ID, Parent, or
