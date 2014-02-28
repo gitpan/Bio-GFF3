@@ -3,7 +3,7 @@ BEGIN {
   $Bio::GFF3::LowLevel::Parser::AUTHORITY = 'cpan:RBUELS';
 }
 {
-  $Bio::GFF3::LowLevel::Parser::VERSION = '1.9';
+  $Bio::GFF3::LowLevel::Parser::VERSION = '1.10';
 }
 # ABSTRACT: a fast, low-level gff3 parser
 
@@ -92,13 +92,22 @@ sub _buffered_items_count {
 sub _buffer_items {
     my ( $self ) = @_;
 
+    # File position buffer, needed for correct parsing of
+    # implicit beginning of a FASTA section
+    my $pos_buffer = 0;
     while( my $line = $self->_next_line ) {
         if( $line =~ /^ \s* [^#\s>] /x ) { #< feature line, most common case
+            # Remember current position
+            $pos_buffer = tell;
+
             my $f = Bio::GFF3::LowLevel::gff3_parse_feature( $line );
             $self->_buffer_feature( $f );
         }
         # directive or comment
         elsif( my ( $hashsigns, $contents ) = $line =~ /^ \s* (\#+) (.*) /x ) {
+            # Remember current position
+            $pos_buffer = tell;
+
             if( length $hashsigns == 3 ) { #< sync directive, all forward-references are resolved.
                 $self->_buffer_all_under_construction_features;
             }
@@ -119,15 +128,30 @@ sub _buffer_items {
         }
         elsif( $line =~ /^ \s* $/x ) {
             # blank line, do nothing
+
+            # Remember current position
+            $pos_buffer = tell;
         }
         elsif( $line =~ /^ \s* > /x ) {
             # implicit beginning of a FASTA section.  a very stupid
             # idea to include this in the format spec.  increases
             # implementation complexity by a lot.
             $self->_buffer_all_under_construction_features;
-            $self->_buffer_item( $self->_handle_implicit_fasta_start( $line ) );
+
+            # rewind to previous file position to include the fasta header
+            my $fh = shift @{$self->{filehandles}};
+            seek $fh, $pos_buffer, 0;
+
+            $self->_buffer_item( { directive => 'FASTA', filehandle => $fh } );
+            shift @{$self->{filethings}};
+
+            # update file position
+            $pos_buffer = tell;
         }
         else { # it's a parse error
+            # Remember current position
+            $pos_buffer = tell;
+
             chomp $line;
             $self->_parse_error("parse error.  Cannot parse '$line'.");
         }
@@ -338,26 +362,6 @@ sub _resolve_references_from {
     }
 }
 
-sub _handle_implicit_fasta_start {
-    my ( $self, $line ) = @_;
-    require POSIX;
-    require IO::Pipe;
-    my $pipe = IO::Pipe->new;
-    unless( fork ) {
-        $pipe->writer;
-        my $fh = $self->{filehandles}[0];
-        undef $self;
-        $pipe->print($line);
-        while( $line = $fh->getline ) {
-            $pipe->print( $line );
-        }
-        $pipe->close;
-        POSIX::_exit(0);
-    }
-    $pipe->reader;
-    shift @$_ for $self->{filehandles}, $self->{filethings};
-    return { directive => 'FASTA', filehandle => $pipe };
-}
 
 1;
 

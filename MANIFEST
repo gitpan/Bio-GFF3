@@ -5,6 +5,7 @@ MANIFEST
 META.json
 META.yml
 Makefile.PL
+Parser_patch.txt
 README
 bin/gff3_from_fasta
 dist.ini

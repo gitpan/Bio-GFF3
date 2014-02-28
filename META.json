@@ -34,9 +34,7 @@
             "File::Temp" : "0",
             "Getopt::Std" : "0",
             "IO::Handle" : "0",
-            "IO::Pipe" : "0",
             "List::MoreUtils" : "0",
-            "POSIX" : "0",
             "Pod::Usage" : "0",
             "Scalar::Util" : "0",
             "URI::Escape" : "0",
@@ -66,7 +64,7 @@
          "web" : "http://github.com/rbuels/bio-gff3"
       }
    },
-   "version" : "1.9",
+   "version" : "1.10",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.014002"
